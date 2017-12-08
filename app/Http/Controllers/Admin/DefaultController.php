@@ -15,4 +15,8 @@ class DefaultController extends Controller
     public function loginPost(Request $request){
         return $request->all();
     }
+
+    public function dashboard(){
+        return view('admin/dashboard');
+    }
 }
