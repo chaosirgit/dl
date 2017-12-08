@@ -17,5 +17,5 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::get('/login','Admin\DefaultController@login');
     Route::post('/login','Admin\DefaultController@loginPost');
-    Route::get('/','Admin\DefaultController@index');
+    Route::get('/main','Admin\DefaultController@index');
 });
