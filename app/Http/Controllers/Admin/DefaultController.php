@@ -9,7 +9,7 @@ class DefaultController extends Controller
 {
     //
     public function login(){
-        return view('login');
+        return view('admin/login');
     }
 
     public function loginPost(Request $request){
