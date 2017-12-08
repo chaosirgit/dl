@@ -15,7 +15,7 @@ Route::get('/',function(){
 });
 Route::group(['prefix' => 'admin'],function(){
 
-    Route::get('/login','Admin\DefaultController@login');
-    Route::post('/login','Admin\DefaultController@loginPost');
-    Route::get('/main','Admin\DefaultController@index');
+    Route::get('/login','Admin\DefaultController@login');           //后台登陆界面
+    Route::post('/login','Admin\DefaultController@loginPost');      //处理登陆提交
+    Route::get('/main','Admin\DefaultController@index');            //后台界面
 });
