@@ -6,7 +6,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>乌云后台登录</title>
+<title>德莱商贸后台登录</title>
 <!-- Custom Theme files -->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
 <!-- Custom Theme files -->
@@ -29,12 +29,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<form>
 				<div class="login-ic">
 					<i ></i>
-					<input type="text"  value="用户" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'User name';}"/>
+					<input type="text"  value="用户" onFocus="this.value = '';" placeholder="username" name="username"/>
 					<div class="clear"> </div>
 				</div>
 				<div class="login-ic">
 					<i class="icon"></i>
-					<input type="password"  value="密码" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'password';}"/>
+					<input type="password"  value="密码" onFocus="this.value = '';" placeholder="password" name="password"/>
 					<div class="clear"> </div>
 				</div>
 			
@@ -43,7 +43,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				</div>
 				</form>
 			</div>
-			<p class="copy">© 2016 xxxxxxxxxxx</p>
+			<p class="copy">© 2017 德莱商贸有限公司</p>
 </div>		
 <!--header start here-->
 </body>
