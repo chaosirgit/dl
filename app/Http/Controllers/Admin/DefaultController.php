@@ -23,4 +23,8 @@ class DefaultController extends Controller
     public function main(){
         return view('admin/main');
     }
+
+    public function form(){
+        return view('admin/form');
+    }
 }

@@ -55,7 +55,7 @@
                                     <i class="layui-icon">&#xe6c6;</i><span> 表格</span></a>
                             </dd>
                             <dd>
-                                <a href="javascript:;" data-url="form.html" data-icon="fa-user" data-title="表单" kit-target data-id='2'><i class="fa fa-user" aria-hidden="true"></i><span> 表单</span></a>
+                                <a href="javascript:;" data-url="form" data-icon="fa-user" data-title="表单" kit-target data-id='2'><i class="fa fa-user" aria-hidden="true"></i><span> 表单</span></a>
                             </dd>
                             <dd>
                                 <a href="javascript:;" data-url="nav.html" data-icon="&#xe628;" data-title="导航栏" kit-target data-id='3'><i class="layui-icon">&#xe628;</i><span> 导航栏</span></a>

@@ -19,4 +19,5 @@ Route::group(['prefix' => 'admin'],function(){
     Route::post('/login','Admin\DefaultController@loginPost');      //处理登陆提交
     Route::get('/index','Admin\DefaultController@index');           //后台界面
     Route::get('/main','Admin\DefaultController@main');             //面板界面
+    Route::get('/form','Admin\DefaultController@form');             //表单
 });
