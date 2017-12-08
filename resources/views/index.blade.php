@@ -27,6 +27,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<h1>登录</h1>
 			<div class="login-top">
 			<form method="post">
+				{{ csrf_field() }}
 				<div class="login-ic">
 					<i ></i>
 					<input type="text"  placeholder="username" name="username"/>
