@@ -28,6 +28,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<div class="login-top">
 			<form method="post">
 				{{ csrf_field() }}
+				@foreach ($errors->all() as $error)
+				<div class="login-ic">
+					<span style="text-align: center;color:red;margin: 0 auto;">
+					{{$error}}
+					</span>
+				</div>
+				@endforeach
 				<div class="login-ic">
 					<i ></i>
 					<input type="text"  placeholder="username" name="username"/>

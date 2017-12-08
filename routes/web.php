@@ -13,10 +13,12 @@
 Route::get('/',function(){
     return view('welcome');
 });
-Route::group(['prefix' => 'admin'],function(){
 
-    Route::get('/login','Admin\DefaultController@login');           //后台登陆界面
-    Route::post('/login','Admin\DefaultController@loginPost');      //处理登陆提交
+Route::get('admin/login','Admin\DefaultController@login');           //后台登陆界面
+Route::post('admin/login','Admin\DefaultController@loginPost');      //处理登陆提交
+
+Route::group(['prefix' => 'admin','middleware'=>['admin']],function(){
+
     Route::get('/index','Admin\DefaultController@index');           //后台界面
     Route::get('/main','Admin\DefaultController@main');             //面板界面
     Route::get('/form','Admin\DefaultController@form');             //表单
