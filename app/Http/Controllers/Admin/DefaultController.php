@@ -11,4 +11,8 @@ class DefaultController extends Controller
     public function login(){
         return view('index');
     }
+
+    public function loginPost(Request $request){
+        return $request->all();
+    }
 }
