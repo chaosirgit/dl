@@ -9,14 +9,14 @@ class DefaultController extends Controller
 {
     //
     public function login(){
-        return view('index');
+        return view('login');
     }
 
     public function loginPost(Request $request){
         return $request->all();
     }
 
-    public function dashboard(){
-        return view('admin/dashboard');
+    public function index(){
+        return view('admin/index');
     }
 }
