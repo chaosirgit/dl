@@ -29,12 +29,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<form>
 				<div class="login-ic">
 					<i ></i>
-					<input type="text"  value="用户" onFocus="this.value = '';" placeholder="username" name="username"/>
+					<input type="text"  placeholder="username" name="username"/>
 					<div class="clear"> </div>
 				</div>
 				<div class="login-ic">
 					<i class="icon"></i>
-					<input type="password"  value="密码" onFocus="this.value = '';" placeholder="password" name="password"/>
+					<input type="password"  placeholder="password" name="password"/>
 					<div class="clear"> </div>
 				</div>
 			
