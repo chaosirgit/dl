@@ -1,58 +1,62 @@
-<!--Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
-<title>德莱商贸后台登录</title>
-<!-- Custom Theme files -->
-<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
-<!-- Custom Theme files -->
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-<meta name="keywords" content="后台登录" />
-<!--Google Fonts-->
-<!--<link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
---><!--Google Fonts-->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>徳莱商贸后台管理系统</title>
+  <link rel="stylesheet" href="css/login.css">
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+  <script src="./lib/layui/layui.js" charset="utf-8"></script>
 </head>
-<body>
-<!--header start here-->
-<div class="login-form">
-			<div class="top-login">
-				<span><img src="images/group.png" alt=""/></span>
-			</div>
-			<h1>登录</h1>
-			<div class="login-top">
-			<form method="post">
-				{{ csrf_field() }}
-				@foreach ($errors->all() as $error)
-				<div class="login-ic">
+<body class="login-bg">
+    <canvas id="fullstarbg">你的浏览器不支持canvas标签</canvas>
+    <div class="login">
+        <div class="message">徳莱商贸管理系统登录</div>
+        <div id="darkbannerwrap"></div>   
+        <form method="post" class="layui-form">
+            {{ csrf_field() }}
+            @foreach ($errors->all() as $error)
+                <div class="login-ic">
 					<span style="text-align: center;color:red;margin: 0 auto;">
 					{{$error}}
 					</span>
-				</div>
-				@endforeach
-				<div class="login-ic">
-					<i ></i>
-					<input type="text"  placeholder="username" name="username"/>
-					<div class="clear"> </div>
-				</div>
-				<div class="login-ic">
-					<i class="icon"></i>
-					<input type="password"  placeholder="password" name="password"/>
-					<div class="clear"> </div>
-				</div>
-			
-				<div class="log-bwn">
-					<input type="submit"  value="Login" >
-				</div>
-				</form>
-			</div>
-			<p class="copy">© 2017 德莱商贸有限公司</p>
-</div>		
-<!--header start here-->
+                </div>
+            @endforeach
+            <input name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
+            <hr class="hr15">
+            <input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
+            <hr class="hr15">
+            <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+            <hr class="hr20" >
+        </form>
+    </div>
+
+    <script>
+            layui.use(['form'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form(),
+                layer = layui.layer;
+
+                //监听提交
+                // form.on('submit(login)',
+                // function(data) {
+                //     console.log(data);
+                //     layer.alert(JSON.stringify(data.field), {
+                //       title: '最终的提交信息'
+                //     },function  () {
+                //         location.href = "./index.html";
+                //     })
+                //     return false;
+                // });
+
+            });
+
+        </script>
+
+    
+    <!-- 底部结束 -->
+    
 </body>
 </html>
