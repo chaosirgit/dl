@@ -29,4 +29,8 @@ Route::group(['prefix' => 'admin','middleware'=>['admin']],function(){
     Route::get('/goods','Admin\DefaultController@goods');           //产品列表
     Route::get('/banner','Admin\DefaultController@banner');         //轮播图列表
     Route::post('/delall','Admin\DefaultController@delall');        //批量删除
+    Route::get('/newsAdd','Admin\DefaultController@newsAdd');       //添加新闻
+    Route::post('/newsAdd','Admin\DefaultController@doNewsAdd');    //添加新闻
+    Route::get('/newsEdit','Admin\DefaultController@newsEdit');     //编辑新闻
+    Route::post('/uploadImage','Admin\DefaultController@uploadImage'); //上传图片
 });

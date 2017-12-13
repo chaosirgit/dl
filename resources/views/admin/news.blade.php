@@ -44,7 +44,7 @@
             </form>
             <xblock>
                 <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button>
-                <button class="layui-btn" onclick="question_add('添加问题','question-add.html','600','500')"><i class="layui-icon">&#xe608;</i>添加</button>
+                <button class="layui-btn" onclick="question_add('添加新闻','newsAdd','600','500')"><i class="layui-icon">&#xe608;</i>添加</button>
                 <span class="x-right" style="line-height:40px">共有数据：{{ App\Article::where('type',2)->count() }} 条</span>
             </xblock>
             <table class="layui-table">
@@ -89,11 +89,11 @@
                             {{ $new->updated_at }}
                         </td>
                         <td class="td-manage">
-                            <a title="编辑" href="javascript:;" onclick="question_edit('编辑','question-edit.html','4','','510')"
+                            <a title="编辑" href="javascript:;" onclick="question_edit('编辑','newsEdit','{{ $new->id }}','','510')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="question_del(this,'1')" 
+                            <a title="删除" href="javascript:;" onclick="question_del(this,{{ $new->id }})"
                             style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
@@ -208,15 +208,32 @@
             }
             //编辑 
            function question_edit (title,url,id,w,h) {
-                x_admin_show(title,url,w,h); 
+                x_admin_show(title,url,w,h);
+
+
             }
 
             /*删除*/
             function question_del(obj,id){
-                layer.confirm('确认要删除吗？',function(index){
+                layer.confirm('确认要删除吗？',function(){
                     //发异步删除数据
-                    $(obj).parents("tr").remove();
-                    layer.msg('已删除!',{icon:1,time:1000});
+                    var arr = new Array();
+                    arr.push(id);
+                    $.ajax({
+                        url:'delall',
+                        type:'post',
+                        dataType:'json',
+                        data:{arr:arr},
+                        success:function(res){
+                            if(res.code==1) {
+                                layer.msg('删除成功', {icon: 1,time:1000});
+                                $(obj).parents("tr").remove();
+                                $('.x-right').html('共有数据：'+res.row_count+' 条')
+                            }else{
+                                layer.msg('删除失败',{icon:0});
+                            }
+                        }
+                    });
                 });
             }
             </script>
