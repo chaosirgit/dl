@@ -117,7 +117,7 @@ class DefaultController extends Controller
 
     public function newsAdd()
     {
-        return view('admin/newsAdd');
+        return view('admin/newsAdd',['act'=>'add']);
     }
 
     public function uploadImage(Request $request)
@@ -165,8 +165,56 @@ class DefaultController extends Controller
     }
 
     public function newsEdit(Request $request){
-        $id = $request->get('id');
-        dd($id);
-        return view('admin/newsEdit');
+        $id = $request->id;
+        $results = Article::where('id',$id)->get()->first();
+        return view('admin/newsAdd',['result'=>$results],['act'=>'edit']);
+    }
+
+    public function doNewsEdit(Request $request){
+        $title = $request->input('title');
+        $author = $request->input('author');
+        $content = $request->input('content');
+        $id = $request->input('id');
+
+        $article = Article::find($id);
+        $article->title = $title;
+        $article->author = $author;
+        $article->content = $content;
+        $article->type = 2;
+        if($article->save()){
+            return response()->json(['code'=>1,'msg'=>'编辑成功']);
+        }else{
+            return response()->json(['code'=>0,'msg'=>'编辑失败']);
+        }
+    }
+
+    public function search(Request $request){
+        $date_start = $request->input('dateStart');
+        $date_end = $request->input('dateEnd');
+        $search_title = $request->input('searchTitle');
+        $search = new Article;
+        if(!empty($date_start)) {
+            $search = $search->where('updated_at', '>', $date_start);
+        }
+        if(!empty($date_end)){
+            $search = $search->where('updated_at','<',$date_end);
+        }
+        if(!empty($search_title)){
+            $search = $search->where('title','like','%'.$search_title.'%');
+        }
+        $results = $search->where('type',2)->orderBy('id','desc')->get();
+        $count = $search->orderBy('id','desc')->count();
+        $inner_html = '';
+        foreach($results as $row){
+            $inner_html .= '<tr>';
+            $inner_html .= '<td><input type="checkbox" value="'.$row->id.'" name=""></td>';
+            $inner_html .= '<td>'.$row->id.'</td>';
+            $inner_html .= '<td>'.$row->title.'</td>';
+            $inner_html .= '<td>'.$row->author.'</td>';
+            $inner_html .= '<td>'.$row->updated_at.'</td>';
+            $inner_html .= '<td class="td-manage"><a title="编辑" href="javascript:;" onclick="question_edit(\'编辑\',\'newsEdit?id='.$row->id.'\',\''.$row->id.'\',\'\',\'510\')" class="ml-5" style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除" href="javascript:;" onclick="question_del(\this,'.$row->id.') "style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td>';
+            $inner_html .= '</tr>';
+        }
+        return response()->json(['results'=>$results,'innerContent'=>$inner_html,'row_count'=>$count]);
     }
 }

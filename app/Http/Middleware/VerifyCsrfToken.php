@@ -16,5 +16,7 @@ class VerifyCsrfToken extends BaseVerifier
         'admin/delall',
         'admin/uploadImage',
         'admin/newsAdd',
+        'admin/newsEdit',
+        'admin/search',
     ];
 }

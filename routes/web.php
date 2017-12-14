@@ -32,5 +32,7 @@ Route::group(['prefix' => 'admin','middleware'=>['admin']],function(){
     Route::get('/newsAdd','Admin\DefaultController@newsAdd');       //添加新闻
     Route::post('/newsAdd','Admin\DefaultController@doNewsAdd');    //添加新闻
     Route::get('/newsEdit','Admin\DefaultController@newsEdit');     //编辑新闻
+    Route::post('/newsEdit','Admin\DefaultController@doNewsEdit');     //编辑新闻
     Route::post('/uploadImage','Admin\DefaultController@uploadImage'); //上传图片
+    Route::post('/search','Admin\DefaultController@search');        //搜索
 });

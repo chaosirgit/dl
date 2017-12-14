@@ -28,16 +28,16 @@
                   <div class="layui-form-item">
                     <label class="layui-form-label">日期范围</label>
                     <div class="layui-input-inline">
-                      <input class="layui-input" placeholder="开始日" id="LAY_demorange_s">
+                      <input class="layui-input" placeholder="开始日" id="dateStart">
                     </div>
                     <div class="layui-input-inline">
-                      <input class="layui-input" placeholder="截止日" id="LAY_demorange_e">
+                      <input class="layui-input" placeholder="截止日" id="dateEnd">
                     </div>
                     <div class="layui-input-inline">
-                      <input type="text" name="username"  placeholder="标题" autocomplete="off" class="layui-input">
+                      <input type="text" name="searchTitle"  placeholder="标题" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-input-inline" style="width:80px">
-                        <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                        <button class="layui-btn"  lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
                     </div>
                   </div>
                 </div> 
@@ -89,7 +89,7 @@
                             {{ $new->updated_at }}
                         </td>
                         <td class="td-manage">
-                            <a title="编辑" href="javascript:;" onclick="question_edit('编辑','newsEdit','{{ $new->id }}','','510')"
+                            <a title="编辑" href="javascript:;" onclick="question_edit('编辑','newsEdit?id={{ $new->id }}','{{ $new->id }}','','510')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
@@ -106,6 +106,7 @@
             <div id="page"></div>
         </div>
         <script src="./lib/layui/layui.js" charset="utf-8"></script>
+        {{--<script src="./lib/layui2/layui.js" charset="utf-8"></script>--}}
         <script src="./js/x-layui.js" charset="utf-8"></script>
         <script>
             window.onload = function(){
@@ -121,27 +122,63 @@
                         }
                     }
                 };
+
             };
+
             layui.use(['laydate','element','laypage','layer'], function(){
                 $ = layui.jquery;//jquery
               laydate = layui.laydate;//日期插件
               lement = layui.element();//面包导航
-              laypage = layui.laypage;//分页
+              var laypage = layui.laypage;//分页
               layer = layui.layer;//弹出层
 
-              //以上模块根据需要引入
+                var Data = $.ajax({
+                    url:'search',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {dateStart: '', dateEnd: '', searchTitle: ''},
+
+                }).parseJSON;
+                console.log(Data);
+                var nums = 5; //每页出现的数据量
+
+                //模拟渲染
+                var render = function(Data,curr){
+                    var innerContent = '';
+                    thisRes = Data.concat().splice(curr*nums-nums,nums);
+                    for(var i=0;i<Data.length;i++){
+                        innerContent += '<tr>';
+                        innerContent += '<td><input type="checkbox" value="'+Data[i].id+'" name=""></td>';
+                        innerContent += '<td>'+Data[i].id+'</td>';
+                        innerContent += '<td>'+Data[i].title+'</td>';
+                        innerContent += '<td>'+Data[i].author+'</td>';
+                        innerContent += '<td>'+Data[i].updated_at+'</td>';
+                        innerContent += '<td class="td-manage"><a title="编辑" href="javascript:;" onclick="question_edit(\'编辑\',\'newsEdit?id='+Data[i].id+'\',\''+Data[i].id+'\',\'\',\'510\')" class="ml-5" style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除" href="javascript:;" onclick="question_del(this,'+Data[i].id+') "style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td>';
+                        innerContent += '</tr>';
+                    }
+                    return innerContent;
+                };
+
+                // 以上模块根据需要引入
               laypage({
-                cont: 'page'
-                ,pages: 100
-                ,first: 1
-                ,last: 100
-                ,prev: '<em><</em>'
-                ,next: '<em>></em>'
-              }); 
-              
-              var start = {
-                min: laydate.now()
-                ,max: '2099-06-16 23:59:59'
+                cont: 'page',       //分页容器ID
+                  pages: Math.ceil(Data.length/nums), //得到总页数
+                  prev: '<em><</em>',  //自定义上一页的内容，支持普通文本和HTML标签
+                next: '<em>></em>', //同上
+                //first:'首页',          //自定义首页，同上
+                //last:'尾页'         //同上
+                  jump: function(obj){
+                      document.getElementById('tb1').innerHTML = render(Data, obj.curr);
+                  }
+
+              });
+
+
+
+
+                var start = {
+                // min: laydate.now(),
+                  max: '2099-06-16 23:59:59'
                 ,istoday: false
                 ,choose: function(datas){
                   end.min = datas; //开始日选好后，重置结束日的最小日期
@@ -150,19 +187,19 @@
               };
               
               var end = {
-                min: laydate.now()
-                ,max: '2099-06-16 23:59:59'
+                // min: laydate.now(),
+                max: '2099-06-16 23:59:59'
                 ,istoday: false
                 ,choose: function(datas){
                   start.max = datas; //结束日选好后，重置开始日的最大日期
                 }
               };
               
-              document.getElementById('LAY_demorange_s').onclick = function(){
+              document.getElementById('dateStart').onclick = function(){
                 start.elem = this;
                 laydate(start);
               }
-              document.getElementById('LAY_demorange_e').onclick = function(){
+              document.getElementById('dateEnd').onclick = function(){
                 end.elem = this
                 laydate(end);
               }
@@ -210,7 +247,6 @@
            function question_edit (title,url,id,w,h) {
                 x_admin_show(title,url,w,h);
 
-
             }
 
             /*删除*/
@@ -236,7 +272,46 @@
                     });
                 });
             }
-            </script>
+
+            layui.use('form',function() {
+                var form = layui.form();
+                //监听提交 搜索
+                form.on('submit(search)', function (data) {
+                    //发异步，把数据提交给php
+                    var dateStart = $('#dateStart').val();
+                    var dateEnd = $('#dateEnd').val();
+                    var searchTitle = $('input[name=searchTitle]').val();
+                    var tb1 = $('#tb1');
+                    $.ajax({
+                        url: 'search',
+                        type: 'post',
+                        dataType: 'json',
+                        data: {dateStart: dateStart, dateEnd: dateEnd, searchTitle: searchTitle},
+                        success: function (res) {
+                            tb1.html('');
+                            var innerContent = '';
+                            for(var i=0;i<res.results.length;i++){
+                                innerContent += '<tr>';
+                                innerContent += '<td><input type="checkbox" value="'+res.results[i].id+'" name=""></td>';
+                                innerContent += '<td>'+res.results[i].id+'</td>';
+                                innerContent += '<td>'+res.results[i].title+'</td>';
+                                innerContent += '<td>'+res.results[i].author+'</td>';
+                                innerContent += '<td>'+res.results[i].updated_at+'</td>';
+                                innerContent += '<td class="td-manage"><a title="编辑" href="javascript:;" onclick="question_edit(\'编辑\',\'newsEdit?id='+res.results[i].id+'\',\''+res.results[i].id+'\',\'\',\'510\')" class="ml-5" style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除" href="javascript:;" onclick="question_del(this,'+res.results[i].id+') "style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td>';
+                                innerContent += '</tr>';
+                            }
+                            tb1.html(innerContent);
+                            $('.x-right').html('共有数据：'+res.row_count+' 条')
+
+                        }
+                    });
+                    return false;
+                });
+            });
+
+
+
+        </script>
             
     </body>
 </html>
