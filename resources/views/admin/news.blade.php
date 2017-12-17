@@ -71,35 +71,35 @@
                     </tr>
                 </thead>
                 <tbody id="tb1">
-                @foreach($news as $new)
-                    <tr>
-                        <td>
-                            <input type="checkbox" value="{{ $new->id }}" name="">
-                        </td>
-                        <td>
-                            {{ $new->id }}
-                        </td>
-                        <td>
-                            {{ $new->title }}
-                        </td>
-                        <td >
-                            {{ $new->author }}
-                        </td>
-                        <td >
-                            {{ $new->updated_at }}
-                        </td>
-                        <td class="td-manage">
-                            <a title="编辑" href="javascript:;" onclick="question_edit('编辑','newsEdit?id={{ $new->id }}','{{ $new->id }}','','510')"
-                            class="ml-5" style="text-decoration:none">
-                                <i class="layui-icon">&#xe642;</i>
-                            </a>
-                            <a title="删除" href="javascript:;" onclick="question_del(this,{{ $new->id }})"
-                            style="text-decoration:none">
-                                <i class="layui-icon">&#xe640;</i>
-                            </a>
-                        </td>
-                    </tr>
-                    @endforeach
+                {{--@foreach($news as $new)--}}
+                    {{--<tr>--}}
+                        {{--<td>--}}
+                            {{--<input type="checkbox" value="{{ $new->id }}" name="">--}}
+                        {{--</td>--}}
+                        {{--<td>--}}
+                            {{--{{ $new->id }}--}}
+                        {{--</td>--}}
+                        {{--<td>--}}
+                            {{--{{ $new->title }}--}}
+                        {{--</td>--}}
+                        {{--<td >--}}
+                            {{--{{ $new->author }}--}}
+                        {{--</td>--}}
+                        {{--<td >--}}
+                            {{--{{ $new->updated_at }}--}}
+                        {{--</td>--}}
+                        {{--<td class="td-manage">--}}
+                            {{--<a title="编辑" href="javascript:;" onclick="question_edit('编辑','newsEdit?id={{ $new->id }}','{{ $new->id }}','','510')"--}}
+                            {{--class="ml-5" style="text-decoration:none">--}}
+                                {{--<i class="layui-icon">&#xe642;</i>--}}
+                            {{--</a>--}}
+                            {{--<a title="删除" href="javascript:;" onclick="question_del(this,{{ $new->id }})"--}}
+                            {{--style="text-decoration:none">--}}
+                                {{--<i class="layui-icon">&#xe640;</i>--}}
+                            {{--</a>--}}
+                        {{--</td>--}}
+                    {{--</tr>--}}
+                    {{--@endforeach--}}
                 </tbody>
             </table>
 
@@ -109,6 +109,25 @@
         {{--<script src="./lib/layui2/layui.js" charset="utf-8"></script>--}}
         <script src="./js/x-layui.js" charset="utf-8"></script>
         <script>
+            var nums = 5; //每页出现的数据量
+
+            //模拟渲染
+            var render = function(Data,curr){
+                var innerContent = '';
+                thisRes = Data.concat().splice(curr*nums-nums,nums);
+                for(var i=0;i<thisRes.length;i++){
+                    innerContent += '<tr>';
+                    innerContent += '<td><input type="checkbox" value="'+thisRes[i].id+'" name=""></td>';
+                    innerContent += '<td>'+thisRes[i].id+'</td>';
+                    innerContent += '<td>'+thisRes[i].title+'</td>';
+                    innerContent += '<td>'+thisRes[i].author+'</td>';
+                    innerContent += '<td>'+thisRes[i].updated_at+'</td>';
+                    innerContent += '<td class="td-manage"><a title="编辑" href="javascript:;" onclick="question_edit(\'编辑\',\'newsEdit?id='+thisRes[i].id+'\',\''+thisRes[i].id+'\',\'\',\'510\')" class="ml-5" style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除" href="javascript:;" onclick="question_del(this,'+thisRes[i].id+') "style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td>';
+                    innerContent += '</tr>';
+                }
+                return innerContent;
+            };
+
             window.onload = function(){
                 var oCh1 = document.getElementById('ch1');
                 var oTb1 = document.getElementById('tb1');
@@ -132,46 +151,36 @@
               var laypage = layui.laypage;//分页
               layer = layui.layer;//弹出层
 
-                var Data = $.ajax({
+
+                $.ajax({
                     url:'search',
                     type: 'post',
                     dataType: 'json',
                     data: {dateStart: '', dateEnd: '', searchTitle: ''},
+                    success:function(res){
 
-                }).parseJSON;
-                console.log(Data);
-                var nums = 5; //每页出现的数据量
 
-                //模拟渲染
-                var render = function(Data,curr){
-                    var innerContent = '';
-                    thisRes = Data.concat().splice(curr*nums-nums,nums);
-                    for(var i=0;i<Data.length;i++){
-                        innerContent += '<tr>';
-                        innerContent += '<td><input type="checkbox" value="'+Data[i].id+'" name=""></td>';
-                        innerContent += '<td>'+Data[i].id+'</td>';
-                        innerContent += '<td>'+Data[i].title+'</td>';
-                        innerContent += '<td>'+Data[i].author+'</td>';
-                        innerContent += '<td>'+Data[i].updated_at+'</td>';
-                        innerContent += '<td class="td-manage"><a title="编辑" href="javascript:;" onclick="question_edit(\'编辑\',\'newsEdit?id='+Data[i].id+'\',\''+Data[i].id+'\',\'\',\'510\')" class="ml-5" style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除" href="javascript:;" onclick="question_del(this,'+Data[i].id+') "style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td>';
-                        innerContent += '</tr>';
+
+                        // 以上模块根据需要引入
+                        laypage({
+                            cont: 'page',       //分页容器ID
+                            pages: Math.ceil(res.results.length/nums), //得到总页数
+                            prev: '<em><</em>',  //自定义上一页的内容，支持普通文本和HTML标签
+                            next: '<em>></em>', //同上
+                            //first:'首页',          //自定义首页，同上
+                            //last:'尾页'         //同上
+                            jump: function(obj){
+                                document.getElementById('tb1').innerHTML = render(res.results, obj.curr);
+                            }
+
+                        });
+
                     }
-                    return innerContent;
-                };
 
-                // 以上模块根据需要引入
-              laypage({
-                cont: 'page',       //分页容器ID
-                  pages: Math.ceil(Data.length/nums), //得到总页数
-                  prev: '<em><</em>',  //自定义上一页的内容，支持普通文本和HTML标签
-                next: '<em>></em>', //同上
-                //first:'首页',          //自定义首页，同上
-                //last:'尾页'         //同上
-                  jump: function(obj){
-                      document.getElementById('tb1').innerHTML = render(Data, obj.curr);
-                  }
+                });
 
-              });
+
+
 
 
 
@@ -273,8 +282,9 @@
                 });
             }
 
-            layui.use('form',function() {
+            layui.use(['form','laypage'],function() {
                 var form = layui.form();
+                var laypage = layui.laypage;//分页
                 //监听提交 搜索
                 form.on('submit(search)', function (data) {
                     //发异步，把数据提交给php
@@ -288,19 +298,21 @@
                         dataType: 'json',
                         data: {dateStart: dateStart, dateEnd: dateEnd, searchTitle: searchTitle},
                         success: function (res) {
-                            tb1.html('');
-                            var innerContent = '';
-                            for(var i=0;i<res.results.length;i++){
-                                innerContent += '<tr>';
-                                innerContent += '<td><input type="checkbox" value="'+res.results[i].id+'" name=""></td>';
-                                innerContent += '<td>'+res.results[i].id+'</td>';
-                                innerContent += '<td>'+res.results[i].title+'</td>';
-                                innerContent += '<td>'+res.results[i].author+'</td>';
-                                innerContent += '<td>'+res.results[i].updated_at+'</td>';
-                                innerContent += '<td class="td-manage"><a title="编辑" href="javascript:;" onclick="question_edit(\'编辑\',\'newsEdit?id='+res.results[i].id+'\',\''+res.results[i].id+'\',\'\',\'510\')" class="ml-5" style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除" href="javascript:;" onclick="question_del(this,'+res.results[i].id+') "style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td>';
-                                innerContent += '</tr>';
-                            }
-                            tb1.html(innerContent);
+
+                            // 以上模块根据需要引入
+                            laypage({
+                                cont: 'page',       //分页容器ID
+                                pages: Math.ceil(res.results.length/nums), //得到总页数
+                                prev: '<em><</em>',  //自定义上一页的内容，支持普通文本和HTML标签
+                                next: '<em>></em>', //同上
+                                //first:'首页',          //自定义首页，同上
+                                //last:'尾页'         //同上
+                                jump: function(obj){
+                                    document.getElementById('tb1').innerHTML = render(res.results, obj.curr);
+                                }
+
+                            });
+
                             $('.x-right').html('共有数据：'+res.row_count+' 条')
 
                         }
@@ -308,7 +320,6 @@
                     return false;
                 });
             });
-
 
 
         </script>

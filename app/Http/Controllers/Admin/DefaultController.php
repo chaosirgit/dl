@@ -73,8 +73,8 @@ class DefaultController extends Controller
 
     public function news()
     {
-        $news = Article::where('type', 2)->orderBy('id','desc')->get();
-        return view('admin/news', ['news' => $news]);
+//        $news = Article::where('type', 2)->orderBy('id','desc')->get();
+        return view('admin/news');
     }
 
     public function letter()
@@ -192,6 +192,7 @@ class DefaultController extends Controller
         $date_start = $request->input('dateStart');
         $date_end = $request->input('dateEnd');
         $search_title = $request->input('searchTitle');
+//        $nums = $request->input('nums');
         $search = new Article;
         if(!empty($date_start)) {
             $search = $search->where('updated_at', '>', $date_start);
@@ -203,7 +204,6 @@ class DefaultController extends Controller
             $search = $search->where('title','like','%'.$search_title.'%');
         }
         $results = $search->where('type',2)->orderBy('id','desc')->get();
-        $count = $search->orderBy('id','desc')->count();
         $inner_html = '';
         foreach($results as $row){
             $inner_html .= '<tr>';
@@ -215,6 +215,7 @@ class DefaultController extends Controller
             $inner_html .= '<td class="td-manage"><a title="编辑" href="javascript:;" onclick="question_edit(\'编辑\',\'newsEdit?id='.$row->id.'\',\''.$row->id.'\',\'\',\'510\')" class="ml-5" style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除" href="javascript:;" onclick="question_del(\this,'.$row->id.') "style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td>';
             $inner_html .= '</tr>';
         }
-        return response()->json(['results'=>$results,'innerContent'=>$inner_html,'row_count'=>$count]);
+        $row_count = $results->count();
+        return response()->json(['results'=>$results,'innerContent'=>$inner_html,'row_count'=>$row_count]);
     }
 }
