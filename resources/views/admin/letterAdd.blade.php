@@ -119,7 +119,7 @@
                       url:'newsAdd',
                       type:'post',
                       dataType:'json',
-                      data:{title:title,author:author,content:content,type:2},
+                      data:{title:title,author:author,content:content,type:1},
                       success:function(res){
                           if(res.code==1){
                               layer.alert("增加成功", {icon: 6},function () {
@@ -155,7 +155,7 @@
                         url:'newsEdit',
                         type:'post',
                         dataType:'json',
-                        data:{title:title,author:author,content:content,id:id,type:2},
+                        data:{title:title,author:author,content:content,id:id,type:1},
                         success:function(res){
                             if(res.code==1){
                                 layer.alert("增加成功", {icon: 6},function () {

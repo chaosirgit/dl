@@ -55,53 +55,84 @@ class DefaultController extends Controller
 
     }
 
-
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         return view('admin/index');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function welcome()
     {
         return view('admin/welcome');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function form()
     {
         return view('admin/form');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function news()
     {
 //        $news = Article::where('type', 2)->orderBy('id','desc')->get();
         return view('admin/news');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function letter()
     {
         return view('admin/letter');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function about()
     {
         return view('admin/about');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function category()
     {
         return view('admin/category');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function goods()
     {
         return view('admin/goods');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function banner()
     {
         return view('admin/banner');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     public function delall(Request $request)
     {
         $arr = $request->input('arr');
@@ -115,11 +146,26 @@ class DefaultController extends Controller
         return response()->json(['code' => 1, 'row_count' => Article::where('type', 2)->count()]);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function newsAdd()
     {
         return view('admin/newsAdd',['act'=>'add']);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function letterAdd()
+    {
+        return view('admin/letterAdd',['act'=>'add']);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function uploadImage(Request $request)
     {
         $validator = Validator::make($request->all(), ['file' => 'required|image']);
@@ -147,16 +193,20 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function doNewsAdd(Request $request){
         $title = $request->input('title');
         $author = $request->input('author');
         $content = $request->input('content');
-
+        $type = $request->input('type');
         $article = new Article;
         $article->title = $title;
         $article->author = $author;
         $article->content = $content;
-        $article->type = 2;
+        $article->type = $type;
         if($article->save()){
             return response()->json(['code'=>1,'msg'=>'添加成功']);
         }else{
@@ -164,23 +214,42 @@ class DefaultController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function newsEdit(Request $request){
         $id = $request->id;
         $results = Article::where('id',$id)->get()->first();
         return view('admin/newsAdd',['result'=>$results],['act'=>'edit']);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function letterEdit(Request $request){
+        $id = $request->id;
+        $results = Article::where('id',$id)->get()->first();
+        return view('admin/letterAdd',['result'=>$results],['act'=>'edit']);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function doNewsEdit(Request $request){
         $title = $request->input('title');
         $author = $request->input('author');
         $content = $request->input('content');
         $id = $request->input('id');
+        $type = $request->input('type');
 
         $article = Article::find($id);
         $article->title = $title;
         $article->author = $author;
         $article->content = $content;
-        $article->type = 2;
+        $article->type = $type;
         if($article->save()){
             return response()->json(['code'=>1,'msg'=>'编辑成功']);
         }else{
@@ -188,10 +257,15 @@ class DefaultController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function search(Request $request){
         $date_start = $request->input('dateStart');
         $date_end = $request->input('dateEnd');
         $search_title = $request->input('searchTitle');
+        $type = $request->input('type');
 //        $nums = $request->input('nums');
         $search = new Article;
         if(!empty($date_start)) {
@@ -203,7 +277,7 @@ class DefaultController extends Controller
         if(!empty($search_title)){
             $search = $search->where('title','like','%'.$search_title.'%');
         }
-        $results = $search->where('type',2)->orderBy('id','desc')->get();
+        $results = $search->where('type',$type)->orderBy('id','desc')->get();
         $inner_html = '';
         foreach($results as $row){
             $inner_html .= '<tr>';

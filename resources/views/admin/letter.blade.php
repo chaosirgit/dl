@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            阳光成单系统
+            徳莱管理系统
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -17,8 +17,8 @@
         <div class="x-nav">
             <span class="layui-breadcrumb">
               <a><cite>首页</cite></a>
-              <a><cite>会员管理</cite></a>
-              <a><cite>问题/资讯列表</cite></a>
+              <a><cite>文章管理</cite></a>
+              <a><cite>文学天地</cite></a>
             </span>
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
@@ -28,26 +28,30 @@
                   <div class="layui-form-item">
                     <label class="layui-form-label">日期范围</label>
                     <div class="layui-input-inline">
-                      <input class="layui-input" placeholder="开始日" id="LAY_demorange_s">
+                      <input class="layui-input" placeholder="开始日" id="dateStart">
                     </div>
                     <div class="layui-input-inline">
-                      <input class="layui-input" placeholder="截止日" id="LAY_demorange_e">
+                      <input class="layui-input" placeholder="截止日" id="dateEnd">
                     </div>
                     <div class="layui-input-inline">
-                      <input type="text" name="username"  placeholder="标题" autocomplete="off" class="layui-input">
+                      <input type="text" name="searchTitle"  placeholder="标题" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-input-inline" style="width:80px">
-                        <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                        <button class="layui-btn"  lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
                     </div>
                   </div>
                 </div> 
             </form>
-            <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="question_add('添加问题','question-add.html','600','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：88 条</span></xblock>
+            <xblock>
+                <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button>
+                <button class="layui-btn" onclick="question_add('添加文学','letterAdd','600','500')"><i class="layui-icon">&#xe608;</i>添加</button>
+                <span class="x-right" style="line-height:40px">共有数据：{{ App\Article::where('type',1)->count() }} 条</span>
+            </xblock>
             <table class="layui-table">
                 <thead>
                     <tr>
                         <th>
-                            <input type="checkbox" name="" value="">
+                            <input type="checkbox" id="ch1">
                         </th>
                         <th>
                             ID
@@ -56,86 +60,134 @@
                             标题
                         </th>
                         <th>
-                            分类
-                        </th>
-                        <th>
-                            来源
+                            作者
                         </th>
                         <th>
                             更新时间
-                        </th>
-                        <th>
-                            浏览次数
                         </th>
                         <th>
                             操作
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <input type="checkbox" value="1" name="">
-                        </td>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            <u style="cursor:pointer" onclick="question_show()">
-                                问题标题
-                            </u>
-                        </td>
-                        <td >
-                            新闻子类1
-                        </td>
-                        <td >
-                            erdangjiade
-                        </td>
-                        <td >
-                            2017-01-01 11:11:42
-                        </td>
-                        <td >
-                            34
-                        </td>
-                        <td class="td-manage">
-                            <a title="编辑" href="javascript:;" onclick="question_edit('编辑','question-edit.html','4','','510')"
-                            class="ml-5" style="text-decoration:none">
-                                <i class="layui-icon">&#xe642;</i>
-                            </a>
-                            <a title="删除" href="javascript:;" onclick="question_del(this,'1')" 
-                            style="text-decoration:none">
-                                <i class="layui-icon">&#xe640;</i>
-                            </a>
-                        </td>
-                    </tr>
+                <tbody id="tb1">
+                {{--@foreach($news as $new)--}}
+                    {{--<tr>--}}
+                        {{--<td>--}}
+                            {{--<input type="checkbox" value="{{ $new->id }}" name="">--}}
+                        {{--</td>--}}
+                        {{--<td>--}}
+                            {{--{{ $new->id }}--}}
+                        {{--</td>--}}
+                        {{--<td>--}}
+                            {{--{{ $new->title }}--}}
+                        {{--</td>--}}
+                        {{--<td >--}}
+                            {{--{{ $new->author }}--}}
+                        {{--</td>--}}
+                        {{--<td >--}}
+                            {{--{{ $new->updated_at }}--}}
+                        {{--</td>--}}
+                        {{--<td class="td-manage">--}}
+                            {{--<a title="编辑" href="javascript:;" onclick="question_edit('编辑','newsEdit?id={{ $new->id }}','{{ $new->id }}','','510')"--}}
+                            {{--class="ml-5" style="text-decoration:none">--}}
+                                {{--<i class="layui-icon">&#xe642;</i>--}}
+                            {{--</a>--}}
+                            {{--<a title="删除" href="javascript:;" onclick="question_del(this,{{ $new->id }})"--}}
+                            {{--style="text-decoration:none">--}}
+                                {{--<i class="layui-icon">&#xe640;</i>--}}
+                            {{--</a>--}}
+                        {{--</td>--}}
+                    {{--</tr>--}}
+                    {{--@endforeach--}}
                 </tbody>
             </table>
 
             <div id="page"></div>
         </div>
         <script src="./lib/layui/layui.js" charset="utf-8"></script>
+        {{--<script src="./lib/layui2/layui.js" charset="utf-8"></script>--}}
         <script src="./js/x-layui.js" charset="utf-8"></script>
         <script>
+            var nums = 5; //每页出现的数据量
+
+            //模拟渲染
+            var render = function(Data,curr){
+                var innerContent = '';
+                thisRes = Data.concat().splice(curr*nums-nums,nums);
+                for(var i=0;i<thisRes.length;i++){
+                    innerContent += '<tr>';
+                    innerContent += '<td><input type="checkbox" value="'+thisRes[i].id+'" name=""></td>';
+                    innerContent += '<td>'+thisRes[i].id+'</td>';
+                    innerContent += '<td>'+thisRes[i].title+'</td>';
+                    innerContent += '<td>'+thisRes[i].author+'</td>';
+                    innerContent += '<td>'+thisRes[i].updated_at+'</td>';
+                    innerContent += '<td class="td-manage"><a title="编辑" href="javascript:;" onclick="question_edit(\'编辑\',\'letterEdit?id='+thisRes[i].id+'&type=1\',\''+thisRes[i].id+'\',\'\',\'510\')" class="ml-5" style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除" href="javascript:;" onclick="question_del(this,'+thisRes[i].id+') "style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td>';
+                    innerContent += '</tr>';
+                }
+                return innerContent;
+            };
+
+            window.onload = function(){
+                var oCh1 = document.getElementById('ch1');
+                var oTb1 = document.getElementById('tb1');
+                var aCh = oTb1.getElementsByTagName('input');
+                oCh1.onclick = function(){
+                    for(var i=0;i<aCh.length;i++){
+                        if(oCh1.checked == false) {
+                            aCh[i].checked = false;
+                        }else{
+                            aCh[i].checked = true;
+                        }
+                    }
+                };
+
+            };
+
             layui.use(['laydate','element','laypage','layer'], function(){
                 $ = layui.jquery;//jquery
               laydate = layui.laydate;//日期插件
               lement = layui.element();//面包导航
-              laypage = layui.laypage;//分页
+              var laypage = layui.laypage;//分页
               layer = layui.layer;//弹出层
 
-              //以上模块根据需要引入
-              laypage({
-                cont: 'page'
-                ,pages: 100
-                ,first: 1
-                ,last: 100
-                ,prev: '<em><</em>'
-                ,next: '<em>></em>'
-              }); 
-              
-              var start = {
-                min: laydate.now()
-                ,max: '2099-06-16 23:59:59'
+
+                $.ajax({
+                    url:'search',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {dateStart: '', dateEnd: '', searchTitle: '',type:1},
+                    success:function(res){
+
+
+
+                        // 以上模块根据需要引入
+                        laypage({
+                            cont: 'page',       //分页容器ID
+                            pages: Math.ceil(res.results.length/nums), //得到总页数
+                            prev: '<em><</em>',  //自定义上一页的内容，支持普通文本和HTML标签
+                            next: '<em>></em>', //同上
+                            //first:'首页',          //自定义首页，同上
+                            //last:'尾页'         //同上
+                            jump: function(obj){
+                                document.getElementById('tb1').innerHTML = render(res.results, obj.curr);
+                            }
+
+                        });
+
+                    }
+
+                });
+
+
+
+
+
+
+
+                var start = {
+                // min: laydate.now(),
+                  max: '2099-06-16 23:59:59'
                 ,istoday: false
                 ,choose: function(datas){
                   end.min = datas; //开始日选好后，重置结束日的最小日期
@@ -144,19 +196,19 @@
               };
               
               var end = {
-                min: laydate.now()
-                ,max: '2099-06-16 23:59:59'
+                // min: laydate.now(),
+                max: '2099-06-16 23:59:59'
                 ,istoday: false
                 ,choose: function(datas){
                   start.max = datas; //结束日选好后，重置开始日的最大日期
                 }
               };
               
-              document.getElementById('LAY_demorange_s').onclick = function(){
+              document.getElementById('dateStart').onclick = function(){
                 start.elem = this;
                 laydate(start);
               }
-              document.getElementById('LAY_demorange_e').onclick = function(){
+              document.getElementById('dateEnd').onclick = function(){
                 end.elem = this
                 laydate(end);
               }
@@ -164,9 +216,34 @@
 
             //批量删除提交
              function delAll () {
-                layer.confirm('确认要删除吗？',function(index){
+                layer.confirm('确认要删除吗？',function(){
                     //捉到所有被选中的，发异步进行删除
-                    layer.msg('删除成功', {icon: 1});
+                    var arr = new Array();
+                    var oTb1 = document.getElementById('tb1');
+                    var aCh = oTb1.getElementsByTagName('input');
+                    for(var i=0;i<aCh.length;i++){
+                        if(aCh[i].checked == true){
+                            $(aCh[i]).parents('tr').addClass('del');
+                            arr.push(aCh[i].value)
+                        }
+                    }
+                    $.ajax({
+                        url : 'delall',
+                        type : 'post',
+                        dataType : 'json',
+                        data:{arr:arr},
+                        success:function(res){
+                            if(res.code==1){
+                                layer.msg('删除成功', {icon: 1});
+                                // $('.del').remove();
+                                // $('.x-right').html('共有数据：'+res.row_count+' 条')
+                                window.location.reload();
+
+                            }else{
+                                layer.msg('删除失败',{icon : 0});
+                            }
+                        }
+                    });
                 });
              }
 
@@ -179,18 +256,76 @@
             }
             //编辑 
            function question_edit (title,url,id,w,h) {
-                x_admin_show(title,url,w,h); 
+                x_admin_show(title,url,w,h);
+
             }
 
             /*删除*/
             function question_del(obj,id){
-                layer.confirm('确认要删除吗？',function(index){
+                layer.confirm('确认要删除吗？',function(){
                     //发异步删除数据
-                    $(obj).parents("tr").remove();
-                    layer.msg('已删除!',{icon:1,time:1000});
+                    var arr = new Array();
+                    arr.push(id);
+                    $.ajax({
+                        url:'delall',
+                        type:'post',
+                        dataType:'json',
+                        data:{arr:arr},
+                        success:function(res){
+                            if(res.code==1) {
+                                layer.msg('删除成功', {icon: 1,time:1000});
+                                // $(obj).parents("tr").remove();
+                                // $('.x-right').html('共有数据：'+res.row_count+' 条')
+                                window.location.reload();
+                            }else{
+                                layer.msg('删除失败',{icon:0});
+                            }
+                        }
+                    });
                 });
             }
-            </script>
+
+            layui.use(['form','laypage'],function() {
+                var form = layui.form();
+                var laypage = layui.laypage;//分页
+                //监听提交 搜索
+                form.on('submit(search)', function (data) {
+                    //发异步，把数据提交给php
+                    var dateStart = $('#dateStart').val();
+                    var dateEnd = $('#dateEnd').val();
+                    var searchTitle = $('input[name=searchTitle]').val();
+                    var tb1 = $('#tb1');
+                    $.ajax({
+                        url: 'search',
+                        type: 'post',
+                        dataType: 'json',
+                        data: {dateStart: dateStart, dateEnd: dateEnd, searchTitle: searchTitle,type:1},
+                        success: function (res) {
+
+                            // 以上模块根据需要引入
+                            laypage({
+                                cont: 'page',       //分页容器ID
+                                pages: Math.ceil(res.results.length/nums), //得到总页数
+                                prev: '<em><</em>',  //自定义上一页的内容，支持普通文本和HTML标签
+                                next: '<em>></em>', //同上
+                                //first:'首页',          //自定义首页，同上
+                                //last:'尾页'         //同上
+                                jump: function(obj){
+                                    document.getElementById('tb1').innerHTML = render(res.results, obj.curr);
+                                }
+
+                            });
+
+                            $('.x-right').html('共有数据：'+res.row_count+' 条')
+
+                        }
+                    });
+                    return false;
+                });
+            });
+
+
+        </script>
             
     </body>
 </html>

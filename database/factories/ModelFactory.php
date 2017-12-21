@@ -28,6 +28,6 @@ $factory->define(App\Article::class,function(Faker\Generator $faker){
         'title' => $faker->jobTitle,
         'content'=>$faker->realText(),
         'author'=>$faker->name,
-        'type'=>2,
+        'type'=>1,
     ];
 });

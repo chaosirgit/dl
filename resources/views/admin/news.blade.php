@@ -122,7 +122,7 @@
                     innerContent += '<td>'+thisRes[i].title+'</td>';
                     innerContent += '<td>'+thisRes[i].author+'</td>';
                     innerContent += '<td>'+thisRes[i].updated_at+'</td>';
-                    innerContent += '<td class="td-manage"><a title="编辑" href="javascript:;" onclick="question_edit(\'编辑\',\'newsEdit?id='+thisRes[i].id+'\',\''+thisRes[i].id+'\',\'\',\'510\')" class="ml-5" style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除" href="javascript:;" onclick="question_del(this,'+thisRes[i].id+') "style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td>';
+                    innerContent += '<td class="td-manage"><a title="编辑" href="javascript:;" onclick="question_edit(\'编辑\',\'newsEdit?id='+thisRes[i].id+'&type=2\',\''+thisRes[i].id+'\',\'\',\'510\')" class="ml-5" style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除" href="javascript:;" onclick="question_del(this,'+thisRes[i].id+') "style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td>';
                     innerContent += '</tr>';
                 }
                 return innerContent;
@@ -156,7 +156,7 @@
                     url:'search',
                     type: 'post',
                     dataType: 'json',
-                    data: {dateStart: '', dateEnd: '', searchTitle: ''},
+                    data: {dateStart: '', dateEnd: '', searchTitle: '',type:2},
                     success:function(res){
 
 
@@ -235,8 +235,10 @@
                         success:function(res){
                             if(res.code==1){
                                 layer.msg('删除成功', {icon: 1});
-                                $('.del').remove();
-                                $('.x-right').html('共有数据：'+res.row_count+' 条')
+                                // $('.del').remove();
+                                // $('.x-right').html('共有数据：'+res.row_count+' 条')
+                                window.location.reload();
+
                             }else{
                                 layer.msg('删除失败',{icon : 0});
                             }
@@ -272,8 +274,9 @@
                         success:function(res){
                             if(res.code==1) {
                                 layer.msg('删除成功', {icon: 1,time:1000});
-                                $(obj).parents("tr").remove();
-                                $('.x-right').html('共有数据：'+res.row_count+' 条')
+                                // $(obj).parents("tr").remove();
+                                // $('.x-right').html('共有数据：'+res.row_count+' 条')
+                                window.location.reload();
                             }else{
                                 layer.msg('删除失败',{icon:0});
                             }
@@ -296,7 +299,7 @@
                         url: 'search',
                         type: 'post',
                         dataType: 'json',
-                        data: {dateStart: dateStart, dateEnd: dateEnd, searchTitle: searchTitle},
+                        data: {dateStart: dateStart, dateEnd: dateEnd, searchTitle: searchTitle,type:2},
                         success: function (res) {
 
                             // 以上模块根据需要引入

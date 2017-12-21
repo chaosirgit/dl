@@ -30,8 +30,10 @@ Route::group(['prefix' => 'admin','middleware'=>['admin']],function(){
     Route::get('/banner','Admin\DefaultController@banner');         //轮播图列表
     Route::post('/delall','Admin\DefaultController@delall');        //批量删除
     Route::get('/newsAdd','Admin\DefaultController@newsAdd');       //添加新闻
+    Route::get('/letterAdd','Admin\DefaultController@letterAdd');   //添加文学
     Route::post('/newsAdd','Admin\DefaultController@doNewsAdd');    //添加新闻
     Route::get('/newsEdit','Admin\DefaultController@newsEdit');     //编辑新闻
+    Route::get('/letterEdit','Admin\DefaultController@letterEdit');     //编辑新闻
     Route::post('/newsEdit','Admin\DefaultController@doNewsEdit');     //编辑新闻
     Route::post('/uploadImage','Admin\DefaultController@uploadImage'); //上传图片
     Route::post('/search','Admin\DefaultController@search');        //搜索
